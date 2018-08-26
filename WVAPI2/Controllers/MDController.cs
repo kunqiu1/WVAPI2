@@ -15,13 +15,13 @@ namespace WVAPI2.Controllers
     [RoutePrefix("api/MD")]
     public class MDController : ApiController
     {
-        private static IBCore _ibcore;
+        private static IBCore m_ibcore;
         [HttpGet]
         [Route("login/{port}/{id}")]
         public void Login(int port,int id)
         {
-            _ibcore = new IBCore();
-            _ibcore.Login(port, id);
+            m_ibcore = new IBCore();
+            m_ibcore.Login(port, id);
 
         }
 
@@ -29,21 +29,21 @@ namespace WVAPI2.Controllers
         [Route("logout")]
         public void Logoff()
         {
-            if (_ibcore!=null)
-            _ibcore.Logoff();
+            if (m_ibcore!=null)
+            m_ibcore.Logoff();
         }
 
         [HttpGet]
         [Route("IsConnected")]
-        public Boolean Isconnected() => _ibcore._Connected;
+        public Boolean Isconnected() => m_ibcore._Connected;
         [HttpGet]
         [Route("AccountName")]
-        public string AccountName() => _ibcore._AccountName;
+        public string AccountName() => m_ibcore._AccountName;
         [HttpGet]
         [Route("MarketData")]
         public IEnumerable<MktData> GetMarketData()
         {
-            return _ibcore._MktData;
+            return m_ibcore._MktData;
         }
 
 
@@ -52,7 +52,7 @@ namespace WVAPI2.Controllers
         [Route("StartMktReq/")]
         public void StartMktReq([FromBody] List<MatlabContractModel> contracts)
         {
-            _ibcore.SubscribeContract(contracts);
+            m_ibcore.SubscribeContract(contracts);
         }
 
     }
