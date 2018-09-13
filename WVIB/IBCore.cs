@@ -21,26 +21,28 @@ namespace WVIB
 
         public List<MatlabContractModel> _MatContracts;
         public List<MktData> _MktData;
+        public IBCore()
+        {
+            _Core = new EWrapperImpl();
+            _Portfolios = new List<IBPortfolioModel>();
+            _Account = new List<IBAccountModel>();
+            _MatContracts = new List<MatlabContractModel>();
+            _MktData = new List<MktData>();
 
+            _Core.OnManagedAccounts += _core_OnManagedAccounts;
+            _Core.OnUpdatePortfolio += _core_OnUpdatePortfolio;
+            _Core.OnUpdateAccount += _Core_OnUpdateAccount;
+            _Core.OnManagedTickPrice += _Core_OnManagedTickPrice;
+            _Core.OntickOptionComputation += _Core_OntickOptionComputation;
+            _Core.OnError1 += _Core_OnError1;
+
+
+            _Client = _Core.ClientSocket;
+        }
         public void Login(int port, int id)
         {
-            if (_Connected == false)
+            if (!_Client.IsConnected())
             {
-                _Core = new EWrapperImpl();
-                _Portfolios = new List<IBPortfolioModel>();
-                _Account = new List<IBAccountModel>();
-                _MatContracts = new List<MatlabContractModel>();
-                _MktData = new List<MktData>();
-
-                _Core.OnManagedAccounts += _core_OnManagedAccounts;
-                _Core.OnUpdatePortfolio += _core_OnUpdatePortfolio;
-                _Core.OnUpdateAccount += _Core_OnUpdateAccount;
-                _Core.OnManagedTickPrice += _Core_OnManagedTickPrice;
-                _Core.OntickOptionComputation += _Core_OntickOptionComputation;
-                _Core.OnError1 += _Core_OnError1;
-
-
-                _Client = _Core.ClientSocket;
                 EReaderSignal readerSignal = _Core.Signal;
                 //! [connect]
                 _Client.eConnect("127.0.0.1", port, id);
@@ -55,7 +57,7 @@ namespace WVIB
 
         public void Logoff()
         {
-            if (_Connected)
+            if (_Client.IsConnected())
             {
                 _Client.eDisconnect();
                 _Connected = false;

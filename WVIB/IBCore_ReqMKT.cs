@@ -15,23 +15,27 @@ namespace WVIB
         {
             foreach (MatlabContractModel _contract in mat)
             {
-                if (!_contract.ReqStatus)
+                if (!_MktData.Select(x=>x.ConId).Contains(_contract.contract.ConId))
                 {
-                    switch (_contract.SecType)
+                    _MktData.Add(new MktData(_contract.ReqId, _contract.contract.ConId));
+                    switch (_contract.contract.SecType)
                     {
-                        case "Futures":
-                            SubscribeFutures(_contract.Symbol, _contract.ExpDate, _contract.Exchange, _contract.ReqId);
+                        case "FUT":
+                            SubscribeFutures(_contract.contract.Symbol, _contract.contract.LastTradeDateOrContractMonth,
+                                _contract.contract.PrimaryExch, _contract.ReqId);
                             break;
-                        case "Option":
-                            SubscribeOptions(_contract.ConId,_contract.Exchange, _contract.ReqId);
+                        case "FOP":
+                            SubscribeOptions(_contract.contract.ConId, _contract.contract.PrimaryExch, _contract.ReqId);
                             break;
-                        case "Equity":
-                            SubscribeStocks(_contract.ConId, _contract.ReqId);
+                        case "OPT":
+                            SubscribeOptions(_contract.contract.ConId,_contract.contract.PrimaryExch, _contract.ReqId);
+                            break;
+                        case "STK":
+                            SubscribeStocks(_contract.contract.ConId, _contract.ReqId);
                             break;
                     }
                 }
             }
-            _MatContracts.AddRange(mat);
         }
         public void SubscribeFutures(string symbol, string expdate, string exchange, int id)
         {

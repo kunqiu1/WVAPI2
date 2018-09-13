@@ -12,6 +12,7 @@ using WVAPIDbEF;
 namespace WVAPI2.Controllers
 {
     [RoutePrefix("api/IB")]
+    [System.Web.Http.Authorize]
     public class IBController : ApiController
     {
         private static IBCore _ibcore;
@@ -19,18 +20,18 @@ namespace WVAPI2.Controllers
         #region Get API/IB
         [HttpGet]
         [Route("login/{port}/{id}")]
-        public void Login(int port,int id)
+        public void Login(int port, int id)
         {
             _ibcore = new IBCore();
-            _ibcore.Login(port,id);
+            _ibcore.Login(port, id);
         }
 
         [HttpGet]
         [Route("logout")]
         public void Logoff()
         {
-            if (_ibcore!=null)
-            _ibcore.Logoff();
+            if (_ibcore != null)
+                _ibcore.Logoff();
         }
 
         [HttpGet]
@@ -57,7 +58,18 @@ namespace WVAPI2.Controllers
         }
         [HttpGet]
         [Route("IsConnected")]
-        public Boolean Isconnected() => _ibcore._Connected;
+        public Boolean Isconnected()
+        {
+            if (_ibcore == null)
+            {
+                return false;
+            }
+            else
+            {
+                return _ibcore._Client.IsConnected();
+            }
+        }
+
         [HttpGet]
         [Route("AccountName")]
         public string AccountName() => _ibcore._AccountName;
@@ -67,7 +79,7 @@ namespace WVAPI2.Controllers
         #endregion
 
         #region Put API/IB
-        [HttpPut]
+        [HttpPost]
         [Route("UpdateStrategy")]
         public HttpResponseMessage UpdateStrategy([FromBody] IBStrategyMapping value)
         {
@@ -75,7 +87,7 @@ namespace WVAPI2.Controllers
             {
                 if (!SQLQueryAccessor.UpdateIbStrategyMapping(value))
                     return Request.CreateErrorResponse(HttpStatusCode.NotFound, "IBStrategymapping with Accountname: " + value.AccountName + ", TickerName: " + value.TickerName + " not found to update");
-                return Request.CreateResponse(HttpStatusCode.OK,value);
+                return Request.CreateResponse(HttpStatusCode.OK, value);
             }
             catch
             {

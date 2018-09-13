@@ -54,45 +54,37 @@ namespace WVIB
 
         private void _Core_OnManagedTickPrice(object sender, TickPriceArg e)
         {
-            var mat = _MatContracts.Where(x => x.ReqId == e.tickerId).FirstOrDefault();
-            string field=TickType.getField(e.field);
-            if (mat!=null)
+            string field = TickType.getField(e.field);
+            var mkt = _MktData.Where(x => x.ReqId == e.tickerId).FirstOrDefault();
+            if (mkt == null)
             {
-                var mkt = _MktData.Where(x => x.ReqId == mat.ReqId).FirstOrDefault();
-                if (mkt==null)
-                {
-                    mkt = new MktData(e.tickerId, field, e.price);
-                    _MktData.Add(mkt);
-                }
-                else
-                {
-                    mkt.AddUpdate(field, e.price);
-                }
+                mkt = new MktData(e.tickerId, field, e.price);
+                _MktData.Add(mkt);
+            }
+            else
+            {
+                mkt.AddUpdate(field, e.price);
             }
         }
         private void _Core_OntickOptionComputation(object sender, TickOptionComputationArg e)
         {
-            var mat = _MatContracts.Where(x => x.ReqId == e.tickerId).FirstOrDefault();
-            if (mat != null)
+            var mkt = _MktData.Where(x => x.ReqId == e.tickerId).FirstOrDefault();
+            if (mkt == null)
             {
-                var mkt = _MktData.Where(x => x.ReqId == mat.ReqId).FirstOrDefault();
-                if (mkt == null)
-                {
-                    mkt = new MktData(e.tickerId, "delta", e.delta);
-                    _MktData.Add(mkt);
-                }
-                else
-                {
-                    mkt.AddUpdate("delta", e.delta);
-                }
-                mkt.AddUpdate("gamma", e.gamma);
-                mkt.AddUpdate("theta", e.theta);
-                mkt.AddUpdate("vega", e.vega);
-                mkt.AddUpdate("iv", e.impliedVolatility);
-                mkt.AddUpdate("optPrice", e.optPrice);
-                mkt.AddUpdate("undPrice", e.undPrice);
-                mkt.AddUpdate("pvDividend", e.pvDividend);
+                mkt = new MktData(e.tickerId, "delta", e.delta);
+                _MktData.Add(mkt);
             }
+            else
+            {
+                mkt.AddUpdate("delta", e.delta);
+            }
+            mkt.AddUpdate("gamma", e.gamma);
+            mkt.AddUpdate("theta", e.theta);
+            mkt.AddUpdate("vega", e.vega);
+            mkt.AddUpdate("iv", e.impliedVolatility);
+            mkt.AddUpdate("optPrice", e.optPrice);
+            mkt.AddUpdate("undPrice", e.undPrice);
+            mkt.AddUpdate("pvDividend", e.pvDividend);
         }
     }
 }

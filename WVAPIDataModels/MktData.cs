@@ -10,6 +10,8 @@ namespace WVAPIDataModels
     {
         public int ReqId;
         public Dictionary<string, double> mktdata;
+        public int ConId;
+        public MktData() { }
 
         public MktData(int id, string field, double value)
         {
@@ -24,6 +26,11 @@ namespace WVAPIDataModels
             else
                 mktdata.Add(field, value);
         }
-
+        public MktData(int reqid,int conid)
+        {
+            ReqId = reqid;
+            ConId = conid;
+            mktdata = new Dictionary<string, double>();
+        }
     }
 }

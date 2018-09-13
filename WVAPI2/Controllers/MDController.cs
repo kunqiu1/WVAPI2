@@ -13,6 +13,7 @@ using WVAPIDbEF;
 namespace WVAPI2.Controllers
 {
     [RoutePrefix("api/MD")]
+    [System.Web.Http.Authorize]
     public class MDController : ApiController
     {
         private static IBCore m_ibcore;
@@ -35,7 +36,7 @@ namespace WVAPI2.Controllers
 
         [HttpGet]
         [Route("IsConnected")]
-        public Boolean Isconnected() => m_ibcore._Connected;
+        public bool Isconnected() => m_ibcore._Client.IsConnected();
         [HttpGet]
         [Route("AccountName")]
         public string AccountName() => m_ibcore._AccountName;

@@ -8,6 +8,7 @@ using System.Web.Http;
 namespace WVAPI2.Controllers
 {
     [RoutePrefix("api/values")]
+    [System.Web.Http.Authorize]
     public class ValuesController : ApiController
     {
         // GET api/values
