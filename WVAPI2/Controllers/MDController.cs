@@ -13,7 +13,6 @@ using WVAPIDbEF;
 namespace WVAPI2.Controllers
 {
     [RoutePrefix("api/MD")]
-    [System.Web.Http.Authorize]
     public class MDController : ApiController
     {
         private static IBCore m_ibcore;

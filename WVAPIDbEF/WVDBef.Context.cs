@@ -30,5 +30,6 @@ namespace WVAPIDbEF
         public virtual DbSet<IBStrategy> IBStrategies { get; set; }
         public virtual DbSet<IBStrategyMapping> IBStrategyMappings { get; set; }
         public virtual DbSet<IBCashActivity> IBCashActivities { get; set; }
+        public virtual DbSet<User> Users { get; set; }
     }
 }

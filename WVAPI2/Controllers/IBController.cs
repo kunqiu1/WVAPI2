@@ -12,12 +12,17 @@ using WVAPIDbEF;
 namespace WVAPI2.Controllers
 {
     [RoutePrefix("api/IB")]
-    [System.Web.Http.Authorize]
     public class IBController : ApiController
     {
         private static IBCore _ibcore;
 
         #region Get API/IB
+        [HttpGet]
+        [Route("Authen/{username}/{password}")]
+        public bool Authen(string username,string password)
+        {
+            return UserSecurity.Login(username, password);
+        }
         [HttpGet]
         [Route("login/{port}/{id}")]
         public void Login(int port, int id)

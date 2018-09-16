@@ -3,27 +3,30 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading;
 using System.Web.Http;
 
 namespace WVAPI2.Controllers
 {
     [RoutePrefix("api/values")]
-    [System.Web.Http.Authorize]
+    //[System.Web.Http.Authorize]
     public class ValuesController : ApiController
     {
         // GET api/values
         [HttpGet]
         [ActionName("wocao")]
-        public IEnumerable<string> Get()
+        public string Get()
         {
-            return new string[] { "value1", "value2" };
+            string username = Thread.CurrentPrincipal.Identity.Name;
+
+            return username;
         }
 
         // GET api/values/5
-
         public string Get(int id)
         {
-            return "value";
+            string username = Thread.CurrentPrincipal.Identity.Name;
+            return username+" niubi";
         }
 
         // POST api/values
