@@ -43,6 +43,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EventArg\PnlArg.cs" />
+    <Compile Include="EventArg\PnlSingleArg.cs" />
     <Compile Include="IBCore_EventHandler.cs" />
     <Compile Include="IBCore_ReqMKT.cs" />
     <Compile Include="EventArg\ErrorMessageArg.cs" />

@@ -54,11 +54,22 @@ namespace WVIB
 
         public virtual void tickOptionComputation(int tickerId, int field, double impliedVolatility, double delta, double optPrice, double pvDividend, double gamma, double vega, double theta, double undPrice)
         {
-            Console.WriteLine("TickOptionComputation. TickerId: " + tickerId + ", field: " + field + ", ImpliedVolatility: " + impliedVolatility + ", Delta: " + delta
-                + ", OptionPrice: " + optPrice + ", pvDividend: " + pvDividend + ", Gamma: " + gamma + ", Vega: " + vega + ", Theta: " + theta + ", UnderlyingPrice: " + undPrice);
             OntickOptionComputation?.Invoke(this, new TickOptionComputationArg(tickerId, field, impliedVolatility, delta,gamma,vega,theta,pvDividend,undPrice,optPrice));
+        }
+
+        public event EventHandler<PnlArg> Onpnl;
+        public void pnl(int reqId, double dailyPnL, double unrealizedPnL, double realizedPnL)
+        {
+            Onpnl?.Invoke(this, new PnlArg(reqId, dailyPnL, unrealizedPnL, realizedPnL));
+        }
+
+        public event EventHandler<PnlSingleArg> OnpnlSingle;
+        public void pnlSingle(int reqId, int pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
+        {
+            OnpnlSingle?.Invoke(this, new PnlSingleArg(reqId,pos, dailyPnL, unrealizedPnL, realizedPnL,value));
 
         }
+        //! [pnl]
         //**************************************************************************************************************
 
         //! [socket_init]
@@ -732,19 +743,7 @@ namespace WVIB
         }
         //! [marketRule]
 
-        //! [pnl]
-        public void pnl(int reqId, double dailyPnL, double unrealizedPnL, double realizedPnL)
-        {
-            Console.WriteLine("PnL. Request Id: {0}, Daily PnL: {1}, Unrealized PnL: {2}, Realized PnL: {3}", reqId, dailyPnL, unrealizedPnL, realizedPnL);
-        }
-        //! [pnl]
 
-        //! [pnlsingle]
-        public void pnlSingle(int reqId, int pos, double dailyPnL, double unrealizedPnL, double realizedPnL, double value)
-        {
-            Console.WriteLine("PnL Single. Request Id: {0}, Pos {1}, Daily PnL {2}, Unrealized PnL {3}, Realized PnL: {4}, Value: {5}", reqId, pos, dailyPnL, unrealizedPnL, realizedPnL, value);
-        }
-        //! [pnlsingle]
 
         //! [historicalticks]
         public void historicalTicks(int reqId, HistoricalTick[] ticks, bool done)
@@ -802,4 +801,6 @@ namespace WVIB
         }
         //! [tickbytickmidpoint]
     }
+
+
 }

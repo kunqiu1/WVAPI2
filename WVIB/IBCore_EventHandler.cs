@@ -15,6 +15,7 @@ namespace WVIB
             _AccountName = e.AccountName;
             _Connected = true;
             _Client.reqAccountUpdates(true, _AccountName);
+            //_Client.reqPnL(17001, _AccountName, "");
             _Client.reqMarketDataType(2);
         }
         private void _core_OnUpdatePortfolio(object sender, UpdatePortfolioArg e)
@@ -26,6 +27,16 @@ namespace WVIB
             {
                 _Portfolios.RemoveAll(x => x.tickerName == pot.contract.LocalSymbol);
                 _Portfolios.Add(pot);
+            }
+            if (_DailyContractPL.All(x => x.Value.ConId != pot.contract.ConId))
+            {
+                int reqid = 1;
+                if (_DailyContractPL.Count() > 0)
+                {
+                    reqid = _DailyContractPL.Keys.ToList().Max() + 1;
+                }
+                _DailyContractPL.Add(reqid, pot.contract);
+                _Client.reqPnLSingle(reqid, _AccountName, "", pot.contractID);
             }
             foreach (IBPortfolioModel _port in _Portfolios)
                 _port.LastUpdate = DateTime.Now;
@@ -85,6 +96,17 @@ namespace WVIB
             mkt.AddUpdate("optPrice", e.optPrice);
             mkt.AddUpdate("undPrice", e.undPrice);
             mkt.AddUpdate("pvDividend", e.pvDividend);
+        }
+        private void _Core_OnpnlSingle(object sender, PnlSingleArg e)
+        {
+            if (e.dailyPnL != double.MaxValue)
+            {
+                int id = _DailyContractPL.Where(x => x.Key == e.reqId).First().Value.ConId;
+                _Portfolios.Where(x => x.contractID == id).First().DailyPNL = e.dailyPnL;
+            }
+        }
+        private void _Core_Onpnl(object sender, PnlArg e)
+        {
         }
     }
 }

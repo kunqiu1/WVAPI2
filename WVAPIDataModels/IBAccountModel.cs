@@ -14,6 +14,7 @@ namespace WVAPIDataModels
         public string accountName { get; set; }
         public DateTime LastUpdate { get; set; }
 
+
         public IBAccountModel(string key, string value, string currency, string accountName)
         {
             this.key = key;

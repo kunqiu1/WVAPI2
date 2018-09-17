@@ -21,11 +21,12 @@ namespace WVAPIDataModels
                 double result = 0;
                 if (secType == "OPT" || secType == "FOP")
                 {
-                    result = AverageCost / Math.Abs(position) / Convert.ToDouble(contract.Multiplier);
+                    result = AverageCost;
                 }
-                else if (secType == "FUT")
+                else
+                if (secType == "FUT")
                 {
-                    result = AverageCost / Convert.ToDouble(contract.Multiplier);
+                    result = AverageCost;
                 }
                 else
                 {
