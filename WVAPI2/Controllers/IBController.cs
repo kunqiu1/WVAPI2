@@ -79,11 +79,14 @@ namespace WVAPI2.Controllers
         [Route("AccountName")]
         public string AccountName() => _ibcore._AccountName;
 
-
+        [HttpGet]
+        [Route("DailyPL")]
+        public double DailyPL() => _ibcore._DailyPL;
 
         #endregion
 
-        #region Put API/IB
+
+        #region Post API/IB
         [HttpPost]
         [Route("UpdateStrategy")]
         public HttpResponseMessage UpdateStrategy([FromBody] IBStrategyMapping value)
@@ -99,9 +102,6 @@ namespace WVAPI2.Controllers
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }
         }
-        #endregion
-
-        #region Post API/IB
         #endregion
 
     }

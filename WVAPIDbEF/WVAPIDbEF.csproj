@@ -58,6 +58,9 @@
     <Compile Include="IBLongShortRatio.cs">
       <DependentUpon>WVDBef.tt</DependentUpon>
     </Compile>
+    <Compile Include="IBStaticData.cs">
+      <DependentUpon>WVDBef.tt</DependentUpon>
+    </Compile>
     <Compile Include="IBStrategy.cs">
       <DependentUpon>WVDBef.tt</DependentUpon>
     </Compile>

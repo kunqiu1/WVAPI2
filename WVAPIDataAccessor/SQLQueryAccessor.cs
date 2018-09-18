@@ -78,6 +78,27 @@ namespace WVAPIDataAccessor
                 return true;
             }
         }
+        public static bool UpdateIbStaticData(IEnumerable<IBStaticData> ibmaps)
+        {
+            using (wvDB entity = new wvDB())
+            {
+                try
+                {
+                    foreach (var ibmap in ibmaps)
+                    {
+                        entity.Configuration.AutoDetectChangesEnabled = false;
+                        ibmap.LastUpdated = DateTime.Now;
+                        entity.IBStaticDatas.AddOrUpdate(ibmap);
+                    }
+                    entity.SaveChanges();
+                }
+                finally
+                {
+                    entity.Configuration.AutoDetectChangesEnabled = true;
+                }
+                return true;
+            }
+        }
         internal static void InsertIbLongShortRatio(List<IBLongShortRatio> longshort)
         {
             using (wvDB entity = new wvDB())

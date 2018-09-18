@@ -37,6 +37,17 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
           <Property Name="Ratio1" Type="decimal" Precision="18" Scale="0" />
           <Property Name="LastUpdated" Type="datetime" />
         </EntityType>
+        <EntityType Name="IBStaticData">
+          <Key>
+            <PropertyRef Name="TickerName" />
+            <PropertyRef Name="FieldName" />
+          </Key>
+          <Property Name="ConId" Type="int" />
+          <Property Name="TickerName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="FieldName" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="Value" Type="varchar(max)" />
+          <Property Name="LastUpdated" Type="datetime" Nullable="false" />
+        </EntityType>
         <EntityType Name="IBStrategy">
           <Key>
             <PropertyRef Name="StrategyName" />
@@ -65,6 +76,7 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
         <EntityContainer Name="WVDEVModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IBLongShortRatio" EntityType="Self.IBLongShortRatio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IBStaticData" EntityType="Self.IBStaticData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IBStrategy" EntityType="Self.IBStrategy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IBStrategyMapping" EntityType="Self.IBStrategyMapping" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
@@ -123,6 +135,7 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
           <EntitySet Name="IBStrategyMappings" EntityType="Self.IBStrategyMapping" />
           <EntitySet Name="IBCashActivities" EntityType="WVDEVModel.IBCashActivity" />
           <EntitySet Name="Users" EntityType="WVDEVModel.User" />
+          <EntitySet Name="IBStaticDatas" EntityType="WVDEVModel.IBStaticData" />
         </EntityContainer>
         <EntityType Name="IBCashActivity">
           <Key>
@@ -143,6 +156,17 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Username" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Password" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="IBStaticData">
+          <Key>
+            <PropertyRef Name="TickerName" />
+            <PropertyRef Name="FieldName" />
+          </Key>
+          <Property Name="ConId" Type="Int32" />
+          <Property Name="TickerName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="FieldName" Type="String" Nullable="false" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -203,6 +227,17 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Username" ColumnName="Username" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IBStaticDatas">
+            <EntityTypeMapping TypeName="WVDEVModel.IBStaticData">
+              <MappingFragment StoreEntitySet="IBStaticData">
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="TickerName" ColumnName="TickerName" />
+                <ScalarProperty Name="ConId" ColumnName="ConId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -22,6 +22,8 @@ namespace WVIB
         public List<MktData> _MktData;
 
         public Dictionary<int,Contract> _DailyContractPL;
+
+        public double _DailyPL;
         public IBCore()
         {
             _Core = new EWrapperImpl();

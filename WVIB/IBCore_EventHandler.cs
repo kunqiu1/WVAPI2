@@ -15,7 +15,7 @@ namespace WVIB
             _AccountName = e.AccountName;
             _Connected = true;
             _Client.reqAccountUpdates(true, _AccountName);
-            //_Client.reqPnL(17001, _AccountName, "");
+            _Client.reqPnL(17000, _AccountName, "");
             _Client.reqMarketDataType(2);
         }
         private void _core_OnUpdatePortfolio(object sender, UpdatePortfolioArg e)
@@ -101,12 +101,18 @@ namespace WVIB
         {
             if (e.dailyPnL != double.MaxValue)
             {
+                if (e.dailyPnL == 0)
+                {
+
+                }
                 int id = _DailyContractPL.Where(x => x.Key == e.reqId).First().Value.ConId;
                 _Portfolios.Where(x => x.contractID == id).First().DailyPNL = e.dailyPnL;
             }
         }
         private void _Core_Onpnl(object sender, PnlArg e)
         {
+            if (e.dailyPnL != double.MaxValue)
+                _DailyPL = e.dailyPnL;
         }
     }
 }
