@@ -101,7 +101,7 @@ namespace WVIB
         {
             if (e.dailyPnL != double.MaxValue)
             {
-                if (e.dailyPnL == 0)
+                if (e.dailyPnL != 0)
                 {
 
                 }

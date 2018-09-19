@@ -26,7 +26,7 @@ namespace WVAPIDataModels
                 else
                 if (secType == "FUT")
                 {
-                    result = AverageCost;
+                    result = AverageCost/Convert.ToDouble(contract.Multiplier);
                 }
                 else
                 {

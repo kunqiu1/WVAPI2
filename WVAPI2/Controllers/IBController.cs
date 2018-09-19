@@ -43,6 +43,9 @@ namespace WVAPI2.Controllers
         [Route("CashBalanceStart")]
         public decimal CashBalanceStart() => SQLQueryAccessor.GetCashActivity(_ibcore._AccountName);
         [HttpGet]
+        [Route("IBStaticData")]
+        public IEnumerable<IBStaticData> IBStaticData() => SQLQueryAccessor.GetIbStaticData();
+        [HttpGet]
         [Route("Portfolio")]
         public IEnumerable<IBPortfolioModel> GetPortfolio()
         {

@@ -32,6 +32,13 @@ namespace WVAPIDataAccessor
                 return entity.IBLongShortRatios.ToList();
             }
         }
+        public static IEnumerable<IBStaticData> GetIbStaticData()
+        {
+            using (wvDB entity = new wvDB())
+            {
+                return entity.IBStaticDatas.ToList();
+            }
+        }
         public static decimal GetCashActivity(string accountname)
         {
             using (wvDB entity = new wvDB())
