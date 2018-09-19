@@ -49,7 +49,7 @@ namespace WVAPI2.Controllers
         [Route("Portfolio")]
         public IEnumerable<IBPortfolioModel> GetPortfolio()
         {
-            IBPortfolioAccessor.UpdatePortfolio(_ibcore._Portfolios, _ibcore._AccountName);
+            IBPortfolioAccessor.UpdatePortfolio(_ibcore);
             return _ibcore._Portfolios;
         }
         [HttpGet]

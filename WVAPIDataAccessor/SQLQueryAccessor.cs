@@ -25,13 +25,6 @@ namespace WVAPIDataAccessor
                 return entity.IBStrategies.ToList();
             }
         }
-        public static IEnumerable<IBLongShortRatio> GetIbLongShort()
-        {
-            using (wvDB entity = new wvDB())
-            {
-                return entity.IBLongShortRatios.ToList();
-            }
-        }
         public static IEnumerable<IBStaticData> GetIbStaticData()
         {
             using (wvDB entity = new wvDB())
@@ -46,6 +39,8 @@ namespace WVAPIDataAccessor
                 return entity.IBCashActivities.Where(x=>x.AccountName==accountname).Sum(x=>x.Amount);
             }
         }
+
+
         internal static void InsertIbStrategyMapping(List<IBStrategyMapping> newmapping)
         {
             using (wvDB entity = new wvDB())
@@ -106,25 +101,25 @@ namespace WVAPIDataAccessor
                 return true;
             }
         }
-        internal static void InsertIbLongShortRatio(List<IBLongShortRatio> longshort)
+        public static bool UpdateIbSecurity(IEnumerable<IBSecurity> ibmaps)
         {
             using (wvDB entity = new wvDB())
             {
                 try
                 {
-                    entity.Configuration.AutoDetectChangesEnabled = false;
-
-                    foreach (IBLongShortRatio i in longshort)
+                    foreach (var ibmap in ibmaps)
                     {
-                        entity.IBLongShortRatios.Add(i);
+                        entity.Configuration.AutoDetectChangesEnabled = false;
+                        ibmap.LastUpdated = DateTime.Now;
+                        entity.IBSecurities.AddOrUpdate(ibmap);
                     }
                     entity.SaveChanges();
-
                 }
                 finally
                 {
                     entity.Configuration.AutoDetectChangesEnabled = true;
                 }
+                return true;
             }
         }
     }

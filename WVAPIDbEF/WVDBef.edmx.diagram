@@ -6,12 +6,12 @@
     <edmx:Diagrams>
       <Diagram DiagramId="871a42011c8f4042b9a73e8dc77614c5" Name="Diagram1">
         <EntityTypeShape EntityType="WVDEVModel.C__MigrationHistory" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="WVDEVModel.IBLongShortRatio" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="WVDEVModel.IBStrategy" Width="1.5" PointX="0.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="WVDEVModel.IBStrategyMapping" Width="1.5" PointX="2.75" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="WVDEVModel.IBCashActivity" Width="1.5" PointX="5.375" PointY="0.75" />
         <EntityTypeShape EntityType="WVDEVModel.User" Width="1.5" PointX="5.375" PointY="3.75" />
         <EntityTypeShape EntityType="WVDEVModel.IBStaticData" Width="1.5" PointX="0.75" PointY="6.75" />
+        <EntityTypeShape EntityType="WVDEVModel.IBSecurity" Width="1.5" PointX="3.375" PointY="6.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

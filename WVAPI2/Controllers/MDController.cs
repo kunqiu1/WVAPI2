@@ -70,7 +70,22 @@ namespace WVAPI2.Controllers
                     return Request.CreateErrorResponse(HttpStatusCode.NotFound, "UpdateStaticData Failed");
                 return Request.CreateResponse(HttpStatusCode.OK, value);
             }
-            catch
+            catch (Exception message)
+            {
+               return Request.CreateResponse(HttpStatusCode.BadRequest);
+            }
+        }
+        [HttpPost]
+        [Route("UpdateIBSecurity")]
+        public HttpResponseMessage UpdateIBSecurity([FromBody] IEnumerable<IBSecurity> value)
+        {
+            try
+            {
+                if (!SQLQueryAccessor.UpdateIbSecurity(value))
+                    return Request.CreateErrorResponse(HttpStatusCode.NotFound, "UpdateIBSecurity Failed");
+                return Request.CreateResponse(HttpStatusCode.OK, value);
+            }
+            catch (Exception message)
             {
                 return Request.CreateResponse(HttpStatusCode.BadRequest);
             }

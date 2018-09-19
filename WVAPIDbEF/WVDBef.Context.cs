@@ -26,11 +26,11 @@ namespace WVAPIDbEF
         }
     
         public virtual DbSet<C__MigrationHistory> C__MigrationHistory { get; set; }
-        public virtual DbSet<IBLongShortRatio> IBLongShortRatios { get; set; }
         public virtual DbSet<IBStrategy> IBStrategies { get; set; }
         public virtual DbSet<IBStrategyMapping> IBStrategyMappings { get; set; }
         public virtual DbSet<IBCashActivity> IBCashActivities { get; set; }
         public virtual DbSet<User> Users { get; set; }
         public virtual DbSet<IBStaticData> IBStaticDatas { get; set; }
+        public virtual DbSet<IBSecurity> IBSecurities { get; set; }
     }
 }

@@ -12,10 +12,11 @@ namespace WVAPIDbEF
     using System;
     using System.Collections.Generic;
     
-    public partial class IBLongShortRatio
+    public partial class IBSecurity
     {
+        public int ConId { get; set; }
         public string TickerName { get; set; }
-        public Nullable<decimal> Ratio1 { get; set; }
-        public Nullable<System.DateTime> LastUpdated { get; set; }
+        public string Exchange { get; set; }
+        public System.DateTime LastUpdated { get; set; }
     }
 }

@@ -29,13 +29,14 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
           <Property Name="Amount" Type="decimal" Precision="18" Scale="0" Nullable="false" />
           <Property Name="LastUpdated" Type="datetime" Nullable="false" />
         </EntityType>
-        <EntityType Name="IBLongShortRatio">
+        <EntityType Name="IBSecurity">
           <Key>
-            <PropertyRef Name="TickerName" />
+            <PropertyRef Name="ConId" />
           </Key>
-          <Property Name="TickerName" Type="varchar" MaxLength="255" Nullable="false" />
-          <Property Name="Ratio1" Type="decimal" Precision="18" Scale="0" />
-          <Property Name="LastUpdated" Type="datetime" />
+          <Property Name="ConId" Type="int" Nullable="false" />
+          <Property Name="TickerName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Exchange" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="LastUpdated" Type="datetime" Nullable="false" />
         </EntityType>
         <EntityType Name="IBStaticData">
           <Key>
@@ -75,7 +76,7 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
         </EntityType>
         <EntityContainer Name="WVDEVModelStoreContainer">
           <EntitySet Name="__MigrationHistory" EntityType="Self.__MigrationHistory" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="IBLongShortRatio" EntityType="Self.IBLongShortRatio" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="IBSecurity" EntityType="Self.IBSecurity" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IBStaticData" EntityType="Self.IBStaticData" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IBStrategy" EntityType="Self.IBStrategy" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="IBStrategyMapping" EntityType="Self.IBStrategyMapping" Schema="dbo" store:Type="Tables" />
@@ -103,14 +104,6 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
           <Property Name="Model" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
           <Property Name="ProductVersion" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
         </EntityType>
-        <EntityType Name="IBLongShortRatio">
-          <Key>
-            <PropertyRef Name="TickerName" />
-          </Key>
-          <Property Name="TickerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Ratio1" Type="Decimal" Precision="18" Scale="0" />
-          <Property Name="LastUpdated" Type="DateTime" Precision="3" />
-        </EntityType>
         <EntityType Name="IBStrategy">
           <Key>
             <PropertyRef Name="StrategyName" />
@@ -130,12 +123,12 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
         </EntityType>
         <EntityContainer Name="wvDB" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="C__MigrationHistory" EntityType="Self.C__MigrationHistory" />
-          <EntitySet Name="IBLongShortRatios" EntityType="Self.IBLongShortRatio" />
           <EntitySet Name="IBStrategies" EntityType="Self.IBStrategy" />
           <EntitySet Name="IBStrategyMappings" EntityType="Self.IBStrategyMapping" />
           <EntitySet Name="IBCashActivities" EntityType="WVDEVModel.IBCashActivity" />
           <EntitySet Name="Users" EntityType="WVDEVModel.User" />
           <EntitySet Name="IBStaticDatas" EntityType="WVDEVModel.IBStaticData" />
+          <EntitySet Name="IBSecurities" EntityType="WVDEVModel.IBSecurity" />
         </EntityContainer>
         <EntityType Name="IBCashActivity">
           <Key>
@@ -168,6 +161,15 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
           <Property Name="Value" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
         </EntityType>
+        <EntityType Name="IBSecurity">
+          <Key>
+            <PropertyRef Name="ConId" />
+          </Key>
+          <Property Name="ConId" Type="Int32" Nullable="false" />
+          <Property Name="TickerName" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="Exchange" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastUpdated" Type="DateTime" Nullable="false" Precision="3" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -181,15 +183,6 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
                 <ScalarProperty Name="ContextKey" ColumnName="ContextKey" />
                 <ScalarProperty Name="Model" ColumnName="Model" />
                 <ScalarProperty Name="ProductVersion" ColumnName="ProductVersion" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="IBLongShortRatios">
-            <EntityTypeMapping TypeName="WVDEVModel.IBLongShortRatio">
-              <MappingFragment StoreEntitySet="IBLongShortRatio">
-                <ScalarProperty Name="TickerName" ColumnName="TickerName" />
-                <ScalarProperty Name="Ratio1" ColumnName="Ratio1" />
-                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -236,6 +229,16 @@ warning 6002: The table/view 'WVDEV.dbo.IBCashActivity' does not have a primary 
                 <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="FieldName" ColumnName="FieldName" />
+                <ScalarProperty Name="TickerName" ColumnName="TickerName" />
+                <ScalarProperty Name="ConId" ColumnName="ConId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="IBSecurities">
+            <EntityTypeMapping TypeName="WVDEVModel.IBSecurity">
+              <MappingFragment StoreEntitySet="IBSecurity">
+                <ScalarProperty Name="LastUpdated" ColumnName="LastUpdated" />
+                <ScalarProperty Name="Exchange" ColumnName="Exchange" />
                 <ScalarProperty Name="TickerName" ColumnName="TickerName" />
                 <ScalarProperty Name="ConId" ColumnName="ConId" />
               </MappingFragment>

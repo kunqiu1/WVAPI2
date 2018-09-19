@@ -55,7 +55,7 @@
     <Compile Include="IBCashActivity.cs">
       <DependentUpon>WVDBef.tt</DependentUpon>
     </Compile>
-    <Compile Include="IBLongShortRatio.cs">
+    <Compile Include="IBSecurity.cs">
       <DependentUpon>WVDBef.tt</DependentUpon>
     </Compile>
     <Compile Include="IBStaticData.cs">

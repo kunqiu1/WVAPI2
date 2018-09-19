@@ -26,7 +26,7 @@ namespace WVAPIDataModels
                 else
                 if (secType == "FUT")
                 {
-                    result = AverageCost/Convert.ToDouble(contract.Multiplier);
+                    result = AverageCost / Convert.ToDouble(contract.Multiplier);
                 }
                 else
                 {
@@ -57,9 +57,12 @@ namespace WVAPIDataModels
         public string strategyName { get; set; }
         public string strategyNameOption { get; set; }
         public string Notes { get; set; }
-        public decimal longShortRatio { get; set; }
+        public double longShortRatio { get; set; }
         public int contractID { get; set; }
         public DateTime LastUpdate { get; set; }
+        public double DividendsAccrued { get; set; }
+        public double DividendsYield { get; set; }
+        public double Duration { get; set; }
 
         public IBPortfolioModel(Contract contract, double position, double marketPrice, double marketValue, double averageCost, double unrealizedPNL, double realizedPNL, string accountName)
         {
@@ -80,6 +83,12 @@ namespace WVAPIDataModels
         public IBPortfolioModel()
         { }
 
-
     }
+    public enum StaticField
+    {
+        DVD_EX_DT,
+        YAS_MOD_DUR,
+        EQY_DVD_YLD_IND,
+        FUND_LEVERAGE_AMOUNT,
+    };
 }

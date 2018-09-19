@@ -10,13 +10,76 @@ namespace WVAPIDataAccessor
 {
     public static class IBPortfolioAccessor
     {
-        public static IEnumerable<IBPortfolioModel> UpdatePortfolio(IEnumerable<IBPortfolioModel> ibport, string accountname)
+        public static IEnumerable<IBPortfolioModel> UpdatePortfolio(IBCore _ibcore)
         {
+
+            var ibport = _ibcore._Portfolios;
+            var accountname = _ibcore._AccountName;
+            var staticdata = SQLQueryAccessor.GetIbStaticData();
             RefreshStrategyMapping(ibport, accountname);
-            RefreshLongShortRatio(ibport);
             RefreshOptionStrategyMapping(ibport);
+            RefreshStaticData(ibport, staticdata);
+
             return ibport;
         }
+
+        private static void RefreshStaticData(List<IBPortfolioModel> ibport, IEnumerable<IBStaticData> staticdata)
+        {
+            foreach (var port in ibport)
+            {
+                var _staticdata = staticdata.Where(x => x.ConId == port.contractID).ToList();
+                if (_staticdata.Count() > 0)
+                {
+                    //Dividend
+                    if (_staticdata.Any(x => x.FieldName == StaticField.EQY_DVD_YLD_IND.ToString()))
+                    {
+                        port.DividendsYield = Convert.ToDouble(_staticdata
+                            .Where(x => x.FieldName == StaticField.EQY_DVD_YLD_IND.ToString())
+                            .Select(x => x.Value).FirstOrDefault());
+                        var lastDate = _staticdata.Where(x => x.FieldName == StaticField.DVD_EX_DT.ToString()).Select(x => x.Value).FirstOrDefault();
+                        if (lastDate != null)
+                        {
+                            port.DividendsAccrued = port.marketValue * (port.DividendsYield) * (DateTime.Today - Convert.ToDateTime(lastDate)).TotalDays / 365;
+                        }
+                    }
+                    else
+                    {
+                        port.DividendsYield = 0;
+                        port.DividendsAccrued = 0;
+                    }
+                    // Long Short Ratio
+                    if (_staticdata.Any(x => x.FieldName == StaticField.FUND_LEVERAGE_AMOUNT.ToString()))
+                    {
+                        port.longShortRatio = Convert.ToDouble(_staticdata.Where(x => x.FieldName == StaticField.FUND_LEVERAGE_AMOUNT.ToString()).Select(x => x.Value).FirstOrDefault());
+                    }
+                    else
+                    {
+                        port.longShortRatio = 1;
+                    }
+                    // Duration
+                    if (_staticdata.Any(x => x.FieldName == StaticField.YAS_MOD_DUR.ToString()))
+                    {
+                        port.Duration = Convert.ToDouble(_staticdata.Where(x => x.FieldName == StaticField.YAS_MOD_DUR.ToString()).Select(x => x.Value).FirstOrDefault());
+                    }
+                    else
+                    {
+                        port.Duration = 0;
+                    }
+                }
+                else
+                {
+                    port.DividendsYield = 0;
+                    port.DividendsAccrued = 0;
+                    port.longShortRatio = 1;
+                    port.Duration = 0;
+                }
+                if (port.secType != "OPT" && port.secType != "FOP")
+                {
+                    port.Delta = port.marketValue * 0.01 * port.longShortRatio;
+                }
+            }
+        }
+
         private static void RefreshOptionStrategyMapping(IEnumerable<IBPortfolioModel> ibport)
         {
             var optport = ibport.Where(x => x.secType == "OPT" || x.secType == "FOP");
@@ -57,7 +120,7 @@ namespace WVAPIDataAccessor
                             {
                                 if (leg1.position * leg2.position < 0)
                                 {
-                                    if (leg1.contract.LastTradeDateOrContractMonth=="20180921")
+                                    if (leg1.contract.LastTradeDateOrContractMonth == "20180921")
                                     {
 
                                     }
@@ -102,28 +165,28 @@ namespace WVAPIDataAccessor
                 port.strategyName = _ibstrategymapping.Where(x => x.TickerName == port.tickerName && x.AccountName == accountname).Select(x => x.IBStrategy).First();
             }
         }
-        private static void RefreshLongShortRatio(IEnumerable<IBPortfolioModel> ibport)
-        {
-            var _longshort = SQLQueryAccessor.GetIbLongShort();
-            var _newlongshort = new List<IBLongShortRatio>();
-            foreach (IBPortfolioModel port in ibport)
-            {
-                if (!_longshort.Select(x => x.TickerName).Contains(port.tickerName) && port.strategyName == "LongShort" && port.secType == "STK")
-                {
-                    _newlongshort.Add(new IBLongShortRatio() { TickerName = port.tickerName, Ratio1 = 1, LastUpdated = DateTime.Now });
-                }
-            }
-            if (_newlongshort.Count > 0)
-            {
-                SQLQueryAccessor.InsertIbLongShortRatio(_newlongshort);
-                _longshort = SQLQueryAccessor.GetIbLongShort();
-            }
-            foreach (IBPortfolioModel port in ibport)
-            {
-                if (port.strategyName == "LongShort" && port.secType == "STK")
-                    port.longShortRatio = (decimal)_longshort.Where(x => x.TickerName == port.tickerName).Select(x => x.Ratio1).First();
-            }
-        }
+        //private static void RefreshLongShortRatio(IEnumerable<IBPortfolioModel> ibport)
+        //{
+        //    var _longshort = SQLQueryAccessor.GetIbLongShort();
+        //    var _newlongshort = new List<IBLongShortRatio>();
+        //    foreach (IBPortfolioModel port in ibport)
+        //    {
+        //        if (!_longshort.Select(x => x.TickerName).Contains(port.tickerName) && port.strategyName == "LongShort" && port.secType == "STK")
+        //        {
+        //            _newlongshort.Add(new IBLongShortRatio() { TickerName = port.tickerName, Ratio1 = 1, LastUpdated = DateTime.Now });
+        //        }
+        //    }
+        //    if (_newlongshort.Count > 0)
+        //    {
+        //        SQLQueryAccessor.InsertIbLongShortRatio(_newlongshort);
+        //        _longshort = SQLQueryAccessor.GetIbLongShort();
+        //    }
+        //    foreach (IBPortfolioModel port in ibport)
+        //    {
+        //        if (port.strategyName == "LongShort" && port.secType == "STK")
+        //            port.longShortRatio = (decimal)_longshort.Where(x => x.TickerName == port.tickerName).Select(x => x.Ratio1).First();
+        //    }
+        //}
 
     }
 }
