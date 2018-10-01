@@ -39,7 +39,13 @@ namespace WVAPIDataAccessor
                 return entity.IBCashActivities.Where(x=>x.AccountName==accountname).Sum(x=>x.Amount);
             }
         }
-
+        public static IEnumerable<IBSecurity> GetIbSecurities()
+        {
+            using (wvDB entity = new wvDB())
+            {
+                return entity.IBSecurities.ToList();
+            }
+        }
 
         internal static void InsertIbStrategyMapping(List<IBStrategyMapping> newmapping)
         {

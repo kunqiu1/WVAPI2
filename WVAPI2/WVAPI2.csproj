@@ -292,6 +292,7 @@
     <Content Include="Connected Services\AzureAD\ConnectedService.json" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
     <None Include="Properties\PublishProfiles\WVVMDEV - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\WVVMDEV - Web Deploy1.pubxml" />
     <None Include="Properties\PublishProfiles\WVVMDEV - Web Deploy2.pubxml" />

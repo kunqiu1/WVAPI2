@@ -49,6 +49,25 @@ namespace WVAPI2.Controllers
         {
             return m_ibcore._MktData;
         }
+
+        [HttpGet]
+        [Route("IBSecurity")]
+        public IEnumerable<Contract> GetIBSecurity()
+        {
+            var temp= SQLQueryAccessor.GetIbSecurities();
+            List<Contract> result = new List<Contract>();
+            foreach (var item in temp)
+            {
+                var contract = new Contract();
+                contract.Symbol = item.TickerName;
+                contract.LocalSymbol = item.TickerName;
+                contract.ConId = item.ConId;
+                contract.PrimaryExch = item.Exchange;
+                contract.SecType = "STK";
+                result.Add(contract);
+            }
+            return result;
+        }
         #endregion
 
 

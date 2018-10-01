@@ -25,6 +25,7 @@ namespace WVAPIDataModels
         public double theta { get; set; }
         public double vega { get; set; }
         public double iv { get; set; }
+
         public List<double> dailyprice { get; set; }
         public List<double>bar1 { get; set; }
         public List<double> bar2 { get; set; }

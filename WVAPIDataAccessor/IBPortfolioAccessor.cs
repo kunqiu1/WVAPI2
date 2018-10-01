@@ -120,10 +120,6 @@ namespace WVAPIDataAccessor
                             {
                                 if (leg1.position * leg2.position < 0)
                                 {
-                                    if (leg1.contract.LastTradeDateOrContractMonth == "20180921")
-                                    {
-
-                                    }
                                     type = "Call Spread";
                                     dir = leg1.position > 0 ? "Long" : "Short";
                                 }

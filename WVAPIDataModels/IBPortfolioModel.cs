@@ -19,14 +19,14 @@ namespace WVAPIDataModels
             get
             {
                 double result = 0;
-                if (secType == "OPT" || secType == "FOP")
+                if (secType == "OPT" )
                 {
                     result = AverageCost;
                 }
                 else
                 if (secType == "FUT")
                 {
-                    result = AverageCost / Convert.ToDouble(contract.Multiplier);
+                    result = AverageCost;
                 }
                 else
                 {
@@ -63,7 +63,9 @@ namespace WVAPIDataModels
         public double DividendsAccrued { get; set; }
         public double DividendsYield { get; set; }
         public double Duration { get; set; }
-
+        public double Bid { get; set; }
+        public double Ask { get; set; }
+        public double ImpliedVol { get; set; }
         public IBPortfolioModel(Contract contract, double position, double marketPrice, double marketValue, double averageCost, double unrealizedPNL, double realizedPNL, string accountName)
         {
             contractID = contract.ConId;

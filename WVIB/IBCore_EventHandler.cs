@@ -15,18 +15,25 @@ namespace WVIB
             _AccountName = e.AccountName;
             _Connected = true;
             _Client.reqAccountUpdates(true, _AccountName);
-            _Client.reqPnL(17000, _AccountName, "");
+            //_Client.reqPnL(17000, _AccountName, "");  hmm it doesn't work...
             _Client.reqMarketDataType(2);
         }
         private void _core_OnUpdatePortfolio(object sender, UpdatePortfolioArg e)
         {
-            IBPortfolioModel pot = new IBPortfolioModel(e.contract, e.position, e.marketPrice, e.marketValue, e.averageCost, e.unrealizedPNL, e.realizedPNL, e.accountName);
-            if (!_Portfolios.Any(a => a.tickerName == pot.contract.LocalSymbol))
+            IBPortfolioModel pot = new IBPortfolioModel();
+            if (_Portfolios.All(a => a.contractID != e.contract.ConId))
+            {
+                pot = new IBPortfolioModel(e.contract, e.position, e.marketPrice, e.marketValue, e.averageCost, e.unrealizedPNL, e.realizedPNL, e.accountName);
                 _Portfolios.Add(pot);
+            }
             else
             {
-                _Portfolios.RemoveAll(x => x.tickerName == pot.contract.LocalSymbol);
-                _Portfolios.Add(pot);
+                pot = _Portfolios.Where(x => x.contractID == e.contract.ConId).FirstOrDefault();
+                pot.position = e.position;
+                pot.marketValue = e.marketValue;
+                pot.averageCost = e.averageCost;
+                pot.unrealizedPNL = e.unrealizedPNL;
+                pot.realizedPNL = e.realizedPNL;
             }
             if (_DailyContractPL.All(x => x.Value.ConId != pot.contract.ConId))
             {
@@ -99,12 +106,8 @@ namespace WVIB
         }
         private void _Core_OnpnlSingle(object sender, PnlSingleArg e)
         {
-            if (e.dailyPnL != double.MaxValue)
+            if (e.dailyPnL != double.MaxValue && e.dailyPnL != double.NaN && e.dailyPnL != 0)
             {
-                if (e.dailyPnL != 0)
-                {
-
-                }
                 int id = _DailyContractPL.Where(x => x.Key == e.reqId).First().Value.ConId;
                 _Portfolios.Where(x => x.contractID == id).First().DailyPNL = e.dailyPnL;
             }
