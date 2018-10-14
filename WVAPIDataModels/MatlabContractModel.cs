@@ -29,7 +29,6 @@ namespace WVAPIDataModels
         public List<double> dailyprice { get; set; }
         public List<double>bar1 { get; set; }
         public List<double> bar2 { get; set; }
-        public double lastunderlying { get; set; }
 
         public MatlabContractModel(Contract contrac1,int i)
         {
